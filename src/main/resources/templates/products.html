@@ -1,12 +1,21 @@
 <!DOCTYPE html >
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout1"
+>
 <head>
     <meta charset="UTF-8">
     <title>Products</title>
 </head>
 <body>
-    <div>
-        <table>
+    <div class="p-3" layout:fragment="content1" >
+        <div>
+            <a class="btn btn-primary" th:href="@{/newProduct}">
+                New Product
+            </a>
+        </div>
+        <table class="table">
             <thead>
             <th>Id</th>
             <th>Name</th>
@@ -19,6 +28,9 @@
                     <td th:text="${p.name}"></td>
                     <td th:text="${p.price}"></td>
                     <td th:text="${p.quantity}"></td>
+                    <td>
+                        <a class="btn btn-danger" onClick="return confirm('Etes vous sure de vouloir supprimer')" th:href="@{/delete(id=${p.id})}">Delete</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
