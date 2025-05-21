@@ -3,7 +3,9 @@ package net.siham.gestionproduits.security;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -14,6 +16,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+//activer les annotations de PreAuthorize
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -32,7 +36,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .formLogin(Customizer.withDefaults())
+                .formLogin(fl->fl.loginPage("/login").permitAll())
+//                .csrf(csrf->csrf.disable())
+                .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests((ar-> ar.requestMatchers("/user/**").hasRole("USER")))
                 .authorizeHttpRequests((ar-> ar.requestMatchers("/admin/**").hasRole("ADMIN")))
                 .authorizeHttpRequests((ar-> ar.requestMatchers("/public/**").permitAll()))
